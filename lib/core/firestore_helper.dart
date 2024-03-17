@@ -57,4 +57,17 @@ class FirestoreHelper{
     List<Task> tasksList = listQueryDocs.map((snapshot) => snapshot.data()).toList();
     return tasksList;
   }
+
+  static Stream<List<Task>> ListenToTasks(String userId , Timestamp date){
+    var collectionReference =  getTasksCollection(userId).where("date",isEqualTo: date);
+    var streamSnapShot = collectionReference.snapshots();
+    var streamTasks = streamSnapShot.map((snapshot)=>snapshot.docs.map((document)=> document.data()).toList() );
+    return streamTasks;
+  }
+
+  static Future<void> DeleteTask({required String taskid,required String userId})async{
+    var collectionReference =  getTasksCollection(userId);
+    var docReference = collectionReference.doc(taskid);
+    await docReference.delete();
+  }
 }

@@ -56,8 +56,8 @@ class _TaskScreenState extends State<TaskScreen> {
           height: 10,
         ),
         Expanded(
-          child: FutureBuilder(
-            future: FirestoreHelper.GetAllTasks(provider.authUser!.uid,Timestamp.fromMillisecondsSinceEpoch(mySelectedDate.millisecondsSinceEpoch)),
+          child: StreamBuilder(
+            stream: FirestoreHelper.ListenToTasks(provider.authUser!.uid,Timestamp.fromMillisecondsSinceEpoch(mySelectedDate.millisecondsSinceEpoch)),
             builder: (BuildContext context, snapshot) {
               if(snapshot.connectionState == ConnectionState.waiting){
                 // loading
